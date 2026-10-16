@@ -51,11 +51,8 @@ const float duracionObjeto = 120;
 const float radioAudio = 180;
 const int vocesZombie = 5;
 namespace Mapa {
-    const int columnas = 50;
-    const int filas = 40;
-    const int tamanoLoseta = 32;
-    const int ancho = columnas * tamanoLoseta;
-    const int alto = filas * tamanoLoseta;
+    const int ancho = 1600;
+    const int alto = 1280;
     const int grosorBorde = 24;
 
     const float zoomCamara = 1.5f;
