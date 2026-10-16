@@ -1,4 +1,4 @@
-# ZZZombies Informe parcial
+# Informe del avance del videojuego
 
 **Universidad Peruana Cayetano Heredia**  
 **Curso:** Programación Orientada a Objetos  
