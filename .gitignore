@@ -1,5 +1,8 @@
-build/
+*.exe
 *.o
-vista-etapa1.png
-vista-inicio.png
-vista-creditos.png
+*.obj
+*.log
+build/
+.vscode/
+Thumbs.db
+.DS_Store
