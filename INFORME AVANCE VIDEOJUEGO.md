@@ -3,8 +3,6 @@
 **Universidad Peruana Cayetano Heredia**  
 **Curso:** Programación Orientada a Objetos  
 **Ciclo:** 2026-2  
-**Entrega:** Avance parcial del proyecto  
-**Fecha:** 15 de octubre de 2026
 
 **Integrantes**
 
