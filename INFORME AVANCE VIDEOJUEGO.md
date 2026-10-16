@@ -146,18 +146,37 @@ La versión parcial compiló con C++17 y las opciones de advertencia -Wall, -Wex
 
 ## Conclusiones
 
-El avance permite iniciar una partida, mover al jugador, combatir, recoger objetos y pasar de oleada. También permite volver a jugar otra partida.
+Aprendimos a distribuir las funciones del juego entre clases y a relacionarlas mediante herencia, composición y referencias. También comprendimos cómo usar el polimorfismo para actualizar por ejemplo al jugador y a los zombis mediante una misma función.
 
-Las clases se relacionan con funciones del juego: Salud controla la vida, Arma controla la munición y Oleada controla la aparición de zombis. Jugador y Zombie comparten una clase base y tienen distintas formas de actualizarse.
+Una dificultad fue coordinarnos para repartir las tareas. Algunos integrantes querían encargarse de los mismos aspectos del juego y surgían varias ideas al mismo tiempo, lo que nos tomó más tiempo para decidir qué hacer y quién se encargaría de cada parte.
 
 ## Anexos
 
-### Actualización durante el combate
+### Control de la salud
 
-Dentro de la función combate se llama a actualizarPersonaje para actualizar al jugador. Después se recorre la lista de zombis y se llama a la misma función para cada uno, pasando el centro del jugador como objetivo.
+La clase Salud utiliza estos métodos para aplicar daño y curación:
 
-### Ejecución
+void recibirDano(int cantidad) { actual = std::max(0, actual - cantidad); }
 
-Para compilar se utiliza Compilar.cmd, con MinGW de 32 bits instalado en C:\msys64\mingw32. Después se abre Jugar.cmd. Cuando se modifica el código, se vuelve a compilar.
+void curar(int cantidad) { actual = std::min(maxima, actual + cantidad); }
 
-El ejecutable debe estar junto a la carpeta assets. vendor contiene la biblioteca necesaria para compilar y su licencia.
+recibirDano resta la cantidad indicada sin dejar que la vida baje de cero. curar suma la cantidad indicada sin superar la vida máxima.
+
+### Actualización de personajes
+
+La clase Personaje declara el siguiente método virtual puro:
+
+virtual void actualizar(float dt, Vector2 objetivo) = 0;
+
+Jugador y Zombie heredan de Personaje e implementan este método. Para actualizarlos se utiliza la siguiente función:
+
+void actualizarPersonaje(Personaje &personaje, float dt, Vector2 objetivo)  
+{  
+personaje.actualizar(dt, objetivo);  
+}
+
+La función recibe al personaje por referencia y llama a actualizar. Si recibe un Jugador, ejecuta su movimiento según el teclado. Si recibe un Zombie, ejecuta la persecución hacia el objetivo. Esto muestra el uso del polimorfismo durante la partida.
+
+
+**El diagrama de clases se encuentra en la sección Organización del código», para no repetir la imagen.**
+
