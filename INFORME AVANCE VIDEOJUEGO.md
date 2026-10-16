@@ -20,6 +20,7 @@ Nuestro equipo está desarrollando un videojuego 2D de supervivencia con oleadas
 En este avance presentamos movimiento, combate, armas, cajas y generación de oleadas.
 El código está organizado en once clases principales.
 Aplicamos herencia, polimorfismo, encapsulamiento, composición, agregación y asociación.
+También usamos los patrones Game Loop, para el ciclo del juego, y Object Pool, para reutilizar las balas.
 Usamos C++17 y raylib para mostrar las imágenes, leer los controles y reproducir los sonidos.
 
 ## Introducción
@@ -96,6 +97,12 @@ Arma también tiene atributos privados. Su método atacar revisa el tiempo de es
 
 Personaje es una clase abstracta porque tiene un método virtual puro. Define los datos y acciones comunes, mientras que Jugador y Zombie implementan cómo se actualiza cada uno.
 
+### Patrones de diseño
+
+Game Loop: la función ejecutar de Juego repite el mismo ciclo mientras la ventana está abierta. Primero actualiza la lógica con el tiempo transcurrido y después dibuja la pantalla.
+
+Object Pool: Juego crea al inicio un arreglo fijo de 48 proyectiles. Al disparar se usa uno que no esté activo y, al terminar su recorrido, queda libre para el siguiente disparo. Así no se crean ni destruyen balas durante la partida.
+
 ## Avance del juego
 
 ### Menú y movimiento
@@ -120,9 +127,9 @@ El botiquín recupera hasta cuatro puntos de vida. La munición rellena las arma
 
 ### Zombis y oleadas
 
-Hay tres tipos de zombi. El normal tiene estadísticas intermedias, el rápido tiene más velocidad y menos vida inicial, y el pesado tiene más vida y daño, pero se mueve más lento.
+Hay tres tipos de zombi. El normal tiene estadísticas intermedias, el rápido tiene más velocidad y menos vida inicial, y el tanque tiene más vida y daño, pero se mueve más lento.
 
-En modo normal, los rápidos pueden aparecer desde la tercera oleada y los pesados desde la quinta. En modo imposible, los tres tipos pueden aparecer desde el inicio, aparecen más enemigos y se reduce la espera entre apariciones. La vida de los zombis aumenta con el número de oleada.
+En modo normal, los rápidos pueden aparecer desde la tercera oleada y los tanques desde la quinta. En modo imposible, los tres tipos pueden aparecer desde el inicio, aparecen más enemigos y se reduce la espera entre apariciones. La vida de los zombis aumenta con el número de oleada.
 
 Una oleada termina cuando ya no quedan zombis vivos ni pendientes de aparecer. El botón SKIP permite adelantar la ronda y tiene una espera de tres segundos entre usos. Los enemigos que siguen vivos permanecen en el mapa.
 
@@ -146,37 +153,143 @@ La versión parcial compiló con C++17 y las opciones de advertencia -Wall, -Wex
 
 ## Conclusiones
 
-Aprendimos a distribuir las funciones del juego entre clases y a relacionarlas mediante herencia, composición y referencias. También comprendimos cómo usar el polimorfismo para actualizar por ejemplo al jugador y a los zombis mediante una misma función.
+El avance permite iniciar una partida, mover al jugador, combatir, recoger objetos y pasar de oleada. También permite volver a jugar otra partida.
 
-Una dificultad fue coordinarnos para repartir las tareas. Algunos integrantes querían encargarse de los mismos aspectos del juego y surgían varias ideas al mismo tiempo, lo que nos tomó más tiempo para decidir qué hacer y quién se encargaría de cada parte.
+Las clases se relacionan con funciones del juego: Salud controla la vida, Arma controla la munición y Oleada controla la aparición de zombis. Jugador y Zombie comparten una clase base y tienen distintas formas de actualizarse.
+
+### Aprendizajes
+
+Aprendimos a decidir cuándo usar herencia y cuándo composición. Jugador y Zombie heredan de Personaje porque ambos son personajes que se mueven y tienen vida. En cambio, un Personaje no es una Salud, sino que tiene una Salud, por eso se usa composición.
+
+También entendimos que el encapsulamiento no consiste solo en poner atributos privados. Salud no tiene un método para cambiar la vida a cualquier valor: solo permite recibir daño y curarse, y cada método respeta los límites de cero y del máximo.
+
+Separar los datos de la lógica facilitó los ajustes. Las estadísticas de armas y zombis están en Variables.h, por lo que se pueden balancear sin modificar las clases.
+
+### Dificultades
+
+Coordinar el trabajo entre integrantes fue la principal dificultad. En algunos momentos hubo versiones distintas del código y de las medidas de las imágenes, y tuvimos que acordar una sola versión antes de la entrega.
+
+Configurar la compilación también tomó tiempo. raylib está compilada para MinGW de 32 bits, por lo que cada computadora necesita el mismo compilador para generar el ejecutable.
+
+Por último, ajustar las colisiones y los proyectiles requirió varias pruebas. Separar el movimiento por ejes y avanzar las balas en pasos pequeños evitó que los personajes y los disparos atravesaran obstáculos o enemigos.
 
 ## Anexos
 
-### Control de la salud
+### Actualización durante el combate
 
-La clase Salud utiliza estos métodos para aplicar daño y curación:
+Dentro de la función combate se llama a actualizarPersonaje para actualizar al jugador. Después se recorre la lista de zombis y se llama a la misma función para cada uno, pasando el centro del jugador como objetivo.
 
-void recibirDano(int cantidad) { actual = std::max(0, actual - cantidad); }
+### Ejecución
 
-void curar(int cantidad) { actual = std::min(maxima, actual + cantidad); }
+Para compilar se utiliza Compilar.cmd, con MinGW de 32 bits instalado en C:\msys64\mingw32. Después se abre Jugar.cmd. Cuando se modifica el código, se vuelve a compilar.
 
-recibirDano resta la cantidad indicada sin dejar que la vida baje de cero. curar suma la cantidad indicada sin superar la vida máxima.
+El ejecutable debe estar junto a la carpeta assets. vendor contiene la biblioteca necesaria para compilar y su licencia.
 
-### Actualización de personajes
+### Fragmentos de código
 
-La clase Personaje declara el siguiente método virtual puro:
+Los fragmentos son de Clases.cpp. Se omiten algunas líneas con `// ...` para mostrar solo lo relevante.
 
-virtual void actualizar(float dt, Vector2 objetivo) = 0;
+**Encapsulamiento: clase Salud**
 
-Jugador y Zombie heredan de Personaje e implementan este método. Para actualizarlos se utiliza la siguiente función:
+```cpp
+class Salud
+{
+private:
+    int actual;
+    int maxima;
+public:
+    Salud(int cantidad = Datos::vidaJugador) : actual(cantidad), maxima(cantidad) {}
+    int getActual() const { return actual; }
+    int getMaxima() const { return maxima; }
+    bool estaVivo() const { return actual > 0; }
+    void recibirDano(int cantidad) { actual = std::max(0, actual - cantidad); }
+    void curar(int cantidad) { actual = std::min(maxima, actual + cantidad); }
+};
+```
 
-void actualizarPersonaje(Personaje &personaje, float dt, Vector2 objetivo)  
-{  
-personaje.actualizar(dt, objetivo);  
+**Herencia, abstracción y composición: clase Personaje**
+
+```cpp
+class Personaje
+{
+protected:
+    Vector2 posicion;
+    float velocidad;
+    // ...
+    Salud salud;                                    // composición
+    void mover(Vector2 movimiento, float dt);
+public:
+    Personaje(Vector2 inicio, float rapidez, int vida) : posicion(inicio), velocidad(rapidez), salud(vida) {}
+    virtual ~Personaje() = default;
+    virtual void actualizar(float dt, Vector2 objetivo) = 0;   // método virtual puro
+    // ...
+};
+
+class Jugador : public Personaje
+{
+private:
+    Arma arma;                                      // composición
+public:
+    void actualizar(float dt, Vector2) override;    // lee el teclado
+    // ...
+};
+
+class Zombie : public Personaje
+{
+public:
+    void actualizar(float dt, Vector2 objetivo) override;   // persigue al jugador
+    // ...
+};
+```
+
+**Polimorfismo durante el combate**
+
+```cpp
+void actualizarPersonaje(Personaje &personaje, float dt, Vector2 objetivo)
+{
+    personaje.actualizar(dt, objetivo);
 }
 
-La función recibe al personaje por referencia y llama a actualizar. Si recibe un Jugador, ejecuta su movimiento según el teclado. Si recibe un Zombie, ejecuta la persecución hacia el objetivo. Esto muestra el uso del polimorfismo durante la partida.
+// dentro de Juego::combate
+actualizarPersonaje(jugador, dt, {0, 0});
+for (int i = 0; i < int(zombies.size()); i++) {
+    actualizarPersonaje(zombies[i], dt, jugador.getCentro());
+    // ...
+}
+```
 
+**Agregación y asociación**
 
-**El diagrama de clases se encuentra en la sección Organización del código», para no repetir la imagen.**
+```cpp
+class Oleada
+{
+private:
+    const std::vector<Zombie> &enemigos;            // agregación: consulta la lista de Juego
+    // ...
+};
 
+class Caja
+{
+private:
+    Sonidos &sonidos;                               // asociación: usa el audio de Juego
+    // ...
+};
+
+// constructor de Juego: entrega sus objetos por referencia
+Juego() : oleada(zombies), caja(sonidos) {}
+```
+
+**Game Loop**
+
+```cpp
+void ejecutar() {
+    // ...
+    cargar();
+    while (!WindowShouldClose() && !salir) {
+        actualizar(std::min(GetFrameTime(), 0.05f));
+        if (!salir) dibujar();
+    }
+    liberar();
+    CloseWindow();
+}
+```
