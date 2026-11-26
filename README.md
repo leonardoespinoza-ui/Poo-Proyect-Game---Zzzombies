@@ -1,48 +1,45 @@
-# ZZZombies - avance parcial del 25 %
+ZZZombies · El amanecer de los muertos
 
-Juego 2D de supervivencia por oleadas para el curso de Programación Orientada a Objetos. Implementado en C++17 con raylib.
+Elige un arma y sobrevive a las oleadas en este juego 2D del curso de Programación Orientada a Objetos. Puedes adelantar la siguiente oleada mientras aún hay zombis en el mapa. Las bajas se acumulan para conseguir tarjetas y cada nueva elección exige más que la anterior.
 
-## Compilar y jugar
+La versión final incluye cuatro armas (pistola, AK-47, espada y katana), seis tipos de zombis y un selector de dificultad. Puedes pausar la partida, volver a jugar con la misma configuración y guardar un nuevo récord con tu nombre.
 
-1. Instalar MinGW de 32 bits en `C:\msys64\mingw32`. La biblioteca incluida requiere esa arquitectura.
-2. Abrir `Compilar.cmd` para generar `ZZZombies.exe`.
-3. Abrir `Jugar.cmd` para jugar. Si falta el ejecutable, intenta compilar primero.
-4. Después de modificar el código, volver a ejecutar `Compilar.cmd`.
+## Jugar en Windows
 
-El ejecutable debe permanecer junto a `assets`. No se incluye en el repositorio: se genera al compilar.
+1. Instala MinGW de MSYS2 de 32 bits en `C:\msys64\mingw32`, con el compilador C++ y SQLite para esa arquitectura (`mingw-w64-i686-gcc` y `mingw-w64-i686-sqlite3`). La biblioteca raylib está incluida en el repositorio.
+2. Abre `Compilar.cmd` desde la carpeta del proyecto. Vuelve a compilar después de cada cambio de código.
+3. Abre `Jugar.cmd` y pulsa **Jugar** para elegir arma y dificultad.
 
-## Controles
+Al compilar se genera `ZZZombies.exe` junto a `assets/`. Mantén ambos en la misma carpeta para que el juego encuentre las imágenes y los sonidos.
 
 | Acción | Control |
 |---|---|
-| Mover | WASD o flechas |
-| Atacar hacia el cursor | Clic izquierdo |
-| Atacar hacia el enemigo más cercano | Espacio |
-| Seleccionar arma | 1, 2, 3 o clic en su casilla |
-| Adelantar oleada | SKIP |
-| Volver al menú | Escape o MENU |
+| Moverse | WASD o flechas |
+| Atacar hacia el cursor | Mantener el clic izquierdo |
+| Atacar al zombi más cercano | Mantener Espacio |
+| Cambiar el arma seleccionada antes de jugar | Flechas izquierda y derecha o los botones del selector |
+| Adelantar una oleada | Botón **Saltar**, disponible tras cinco segundos |
+| Pausar y continuar | Esc, P o los botones en pantalla |
 
-## Alcance
+## Dificultad y recompensas
 
-Incluye menú, jugador animado, mapa urbano, tres tipos de zombi, espada, pistola, AK, cajas, botiquines, munición, audio, modos normal e imposible y reinicio tras perder. Los dos patrones de diseño del proyecto final aún están pendientes.
+| Modo | Salud inicial | Bajas para la primera tarjeta | Puntos por oleada completada |
+|---|---|---:|---:|
+| Fácil | 3 a 5 corazones según el arma | 5 | 10 |
+| Difícil | 3 a 5 corazones según el arma | 14 | 15 |
+| Imposible | 1 corazón con cualquier arma | 14 | 20 |
 
-## Archivos
+Cada baja suma 10 puntos. Difícil e Imposible comparten hordas más numerosas y resistentes. Al elegir una tarjeta, el siguiente requisito aumenta un 35 % redondeado al entero más cercano, con un incremento máximo de 18 bajas. Puedes mejorar daño o velocidad, ganar monedas o recuperar un corazón cuando corresponda.
 
-- `Clases.cpp`: once clases principales y funciones auxiliares.
-- `Variables.h`: estadísticas, configuración, mapa y rutas.
-- `assets/`: imágenes y sonidos utilizados por esta versión.
-- `vendor/raylib/`: cabecera, biblioteca de 32 bits y licencia.
-- [Informe parcial](INFORME_PARCIAL_ZZZOMBIES.md): arquitectura, UML, fundamentos de POO y resultados.
+SQLite conserva el saldo, las armas desbloqueadas, el historial y el récord en `ZZZombies.sqlite`. El juego crea ese archivo en el equipo al iniciarse.
 
-## Actualizar GitHub
+## Recorrido por el código
 
-Desde una copia clonada de este repositorio, guardar los cambios y ejecutar:
+| Parte | Dónde empezar | Qué buscar |
+|---|---|---|
+| Partida y combate | [Partida.cpp](src/Partida.cpp) | `nuevaOleada`, `saltar` y `elegir` |
+| Persistencia | [Guardado.cpp](src/Guardado.cpp) | `comprar` y `guardarRecord` |
+| Interfaz | [Pantallas.cpp](src/Pantallas.cpp) | `dibujarPartida` y `dibujarCartas` |
+| Integración | [main.cpp](src/main.cpp) | `ejecutar` conecta los eventos de la partida con las pantallas y el guardado |
 
-```sh
-git status
-git add Clases.cpp Variables.h INFORME_PARCIAL_ZZZOMBIES.md README.md
-git commit -m "Actualizar avance parcial e informe"
-git push origin main
-```
-
-Agregar explícitamente también los recursos nuevos cuando corresponda. Cada integrante debe registrar sus aportes reales con su propia cuenta; subir todos los archivos una vez no demuestra todo el trabajo del equipo.
+El [informe del avance](INFORME%20AVANCE%20VIDEOJUEGO.md) y los diagramas de esa etapa documentan el prototipo. La versión final se compila desde `src/`.
