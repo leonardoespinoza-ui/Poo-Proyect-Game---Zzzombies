@@ -7,7 +7,7 @@ Kenneth Samir Ramos Espinoza, Giordano Valentino Valero Bonifacio, Leonardo Pedr
 
 ## De qué trata el juego
 
-En ZZZombies eliges un arma y sales a sobrevivir oleadas. Puedes usar una pistola, un AK-47, una espada o una katana. Si peleas de cerca, la espada te da un corazón extra y la katana te da dos. En Imposible tienes un solo corazón con cualquier arma. Nos gusta esa diferencia porque puedes probar el mismo mapa con otra arma y terminar jugando de otra manera.
+En ZZZombies eliges un arma y sales a sobrevivir oleadas. Puedes usar una pistola, un AK-47, una espada o una katana. Si peleas de cerca, la espada te da un corazón extra y la katana te da dos. En Imposible tienes un solo corazón con cualquier arma. Esto añade una capa nueva de personalización y dificultad, pero se gratifica con mayor puntaje por oleada para los jugadores del modo imposible.
 
 Desde el avance simplificamos el combate. Quitamos las cajas, la munición y las mejoras de arma para concentrarnos en pelear, decidir cuándo saltar la oleada y elegir tarjetas. También añadimos pausa, efectos para los zombis especiales y un récord local.
 
