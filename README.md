@@ -1,6 +1,6 @@
-ZZZombies · El amanecer de los muertos
+# ZZZombies · El amanecer de los muertos
 
-¿Podrás sobrevivir a este juego infinito de oleadas de zombies? 
+Elige un arma y sobrevive a las oleadas en este juego 2D del curso de Programación Orientada a Objetos. Puedes adelantar la siguiente oleada mientras aún hay zombis en el mapa. Las bajas se acumulan para conseguir tarjetas y cada nueva elección exige más que la anterior.
 
 La versión final incluye cuatro armas (pistola, AK-47, espada y katana), seis tipos de zombis y un selector de dificultad. Puedes pausar la partida, volver a jugar con la misma configuración y guardar un nuevo récord con tu nombre.
 
@@ -42,4 +42,4 @@ SQLite conserva el saldo, las armas desbloqueadas, el historial y el récord en 
 | Interfaz | [Pantallas.cpp](src/Pantallas.cpp) | `dibujarPartida` y `dibujarCartas` |
 | Integración | [main.cpp](src/main.cpp) | `ejecutar` conecta los eventos de la partida con las pantallas y el guardado |
 
-El informe de la versión final se encuentra en: [Leer el informe](Informe%20de%20la%20versi%C3%B3n%20final.md)
+El [informe del avance](INFORME%20AVANCE%20VIDEOJUEGO.md) y los diagramas de esa etapa documentan el prototipo. La versión final se compila desde `src/`.
