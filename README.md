@@ -1,6 +1,6 @@
 ZZZombies · El amanecer de los muertos
 
-Elige un arma y sobrevive a las oleadas en este juego 2D del curso de Programación Orientada a Objetos. Puedes adelantar la siguiente oleada mientras aún hay zombis en el mapa. Las bajas se acumulan para conseguir tarjetas y cada nueva elección exige más que la anterior.
+¿Podrás sobrevivir a este juego infinito de oleadas de zombies? 
 
 La versión final incluye cuatro armas (pistola, AK-47, espada y katana), seis tipos de zombis y un selector de dificultad. Puedes pausar la partida, volver a jugar con la misma configuración y guardar un nuevo récord con tu nombre.
 
