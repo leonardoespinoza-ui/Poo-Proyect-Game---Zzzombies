@@ -42,4 +42,4 @@ SQLite conserva el saldo, las armas desbloqueadas, el historial y el récord en 
 | Interfaz | [Pantallas.cpp](src/Pantallas.cpp) | `dibujarPartida` y `dibujarCartas` |
 | Integración | [main.cpp](src/main.cpp) | `ejecutar` conecta los eventos de la partida con las pantallas y el guardado |
 
-El [informe de la versión final se encuentra en:](Informe%20de%20la%20versi%C3%B3n%20final.md)
+El informe de la versión final se encuentra en: [Leer el informe](Informe%20de%20la%20versi%C3%B3n%20final.md)
