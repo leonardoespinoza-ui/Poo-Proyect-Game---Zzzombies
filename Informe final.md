@@ -1,4 +1,4 @@
-# ZZZombies · El amanecer de los muertos
+# ZZZombies - El amanecer de los muertos
 
 **Informe final de Programación Orientada a Objetos**  
 Universidad Peruana Cayetano Heredia · Ciclo 2026-2
