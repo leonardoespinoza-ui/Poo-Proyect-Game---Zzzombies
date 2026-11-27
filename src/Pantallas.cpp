@@ -273,6 +273,7 @@ void dibujarPartida(const Arte& arte, const Partida& p) {
     };
     auto dibujarJugador = [&] {
         if (p.termino()) return;
+        DrawEllipse(int(p.jugador.pos.x), int(p.jugador.pos.y + 6), 13, 5, Fade(BLACK, .4f));
         if (!p.invulnerable || int(p.invulnerable * 16) % 2 == 0) actor(arte.jugador, p.jugador, 16, 34);
         if (p.efectoAtaque <= 0 || armas[p.arma].distancia) return;
         float progreso = Clamp(1 - p.efectoAtaque / .18f, 0, 1);
