@@ -42,4 +42,12 @@ SQLite conserva el saldo, las armas desbloqueadas, el historial y el récord en 
 | Interfaz | [Pantallas.cpp](src/Pantallas.cpp) | `dibujarPartida` y `dibujarCartas` |
 | Integración | [main.cpp](src/main.cpp) | `ejecutar` conecta los eventos de la partida con las pantallas y el guardado |
 
-El [informe del avance](INFORME%20AVANCE%20VIDEOJUEGO.md) y los diagramas de esa etapa documentan el prototipo. La versión final se compila desde `src/`.
+## Informe de la versión final
+
+El informe explica la evolución del juego, las colisiones y los conceptos de POO usados en el código. [Leer el informe de la versión final](Informe%20de%20la%20versi%C3%B3n%20final.md)
+
+## Récord global
+
+Al guardar una marca nueva, el juego la conserva en SQLite y la sincroniza con Supabase en segundo plano. El servidor guarda la mejor marca de cada instalación con su puntaje, modo y oleada. El menú muestra el récord global y tu puesto.
+
+La configuración pública del ranking viene en `supabase/config.txt`. Mantén la carpeta `supabase/` junto al ejecutable. Si se pierde la conexión, el juego puede volver a sincronizar la marca local al abrirse.
