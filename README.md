@@ -48,6 +48,6 @@ El informe explica la evolución del juego, las colisiones y los conceptos de PO
 
 ## Récord global
 
-Al guardar una marca nueva, el juego la conserva en SQLite y la sincroniza con Supabase en segundo plano. El servidor guarda la mejor marca de cada instalación con su puntaje, modo y oleada. El menú muestra el récord global y tu puesto.
+Al guardar una marca nueva, el juego la conserva en SQLite y la sincroniza con Supabase en segundo plano. El servidor guarda la mejor marca de cada dispositivo con su puntaje, modo y oleada. El menú muestra el récord global y tu puesto.
 
 La configuración pública del ranking viene en `supabase/config.txt`. Mantén la carpeta `supabase/` junto al ejecutable. Si se pierde la conexión, el juego puede volver a sincronizar la marca local al abrirse.
