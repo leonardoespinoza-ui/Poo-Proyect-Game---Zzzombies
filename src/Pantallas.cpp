@@ -161,7 +161,7 @@ void controlesMenu() {
     centrado("APUNTAR", 737, 638, 17);
 }
 }
-Accion dibujarMenu(int, int record, const std::string& titular, int oleadas, int modo) {
+Accion dibujarMenu(int, int record, const std::string& titular, int oleadas, int modo, const std::string& global) {
     imagen(portada,{0,0,Ancho,Alto});
     centrado("EL AMANECER DE LOS MUERTOS", Ancho / 2, 203, 22, Oro);
     Accion a;
@@ -174,6 +174,7 @@ Accion dibujarMenu(int, int record, const std::string& titular, int oleadas, int
         centrado(modo < 0 ? "OLEADA Y MODO SIN DATOS" : TextFormat("OLEADA %d  /  %s",oleadas,nombreModo(static_cast<Modo>(modo))),
                  666,427,17,Claro);
     }
+    if (!global.empty()) centrado(global.c_str(), Ancho / 2, 503, 17, Oro);
     controlesMenu();
     return a;
 }

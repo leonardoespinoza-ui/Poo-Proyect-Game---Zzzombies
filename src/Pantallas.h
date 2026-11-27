@@ -18,7 +18,7 @@ struct Accion {
     bool menu = false, jugar = false, guardar = false, comprar = false, dificultad = false;
 };
 void dibujarCarga(const Arte& arte, float tiempo);
-Accion dibujarMenu(int monedas, int record, const std::string& titular, int oleadas = 0, int modo = -1);
+Accion dibujarMenu(int monedas, int record, const std::string& titular, int oleadas, int modo, const std::string& global);
 Accion dibujarArmas(const Arte& arte, const OpcionArma* opciones, int seleccion, Modo modo, int monedas, float tiempo);
 inline constexpr float FinCarga = 3.38f;
 inline constexpr Rectangle BotonSkip{758, 660, 110, 43}, BotonPausa{881, 660, 56, 43};

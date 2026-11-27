@@ -43,6 +43,13 @@ std::string Guardado::titular() const {
     if (!q.stmt || sqlite3_step(q.stmt) != SQLITE_ROW) return {};
     return reinterpret_cast<const char*>(sqlite3_column_text(q.stmt, 0));
 }
+std::string Guardado::idInstalacion() const {
+    if (!ejecutar("CREATE TABLE IF NOT EXISTS instalacion(id INTEGER PRIMARY KEY CHECK(id=1), clave TEXT NOT NULL);"
+                  "INSERT OR IGNORE INTO instalacion VALUES(1,lower(hex(randomblob(32))));")) return {};
+    Consulta q(db, "SELECT clave FROM instalacion WHERE id=1");
+    if (!q.stmt || sqlite3_step(q.stmt) != SQLITE_ROW) return {};
+    return reinterpret_cast<const char*>(sqlite3_column_text(q.stmt, 0));
+}
 bool Guardado::disponible(int arma) const { return entero("SELECT COUNT(*) FROM armas WHERE id=?", arma) != 0; }
 bool Guardado::comprar(int arma, int precio) {
     if (precio <= 0 || !ejecutar("BEGIN IMMEDIATE")) return false;

@@ -13,6 +13,7 @@ public:
     std::string titular() const;
     int oleadaRecord() const;
     int modoRecord() const;
+    std::string idInstalacion() const;
     bool disponible(int arma) const;
     bool comprar(int arma, int precio);
     bool premiar(int cantidad);

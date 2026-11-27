@@ -1,4 +1,5 @@
 #include "Guardado.h"
+#include "RecordGlobal.h"
 #include "Pantallas.h"
 #include "raymath.h"
 #include <algorithm>
@@ -31,6 +32,7 @@ void ejecutar(const Arte& arte, Guardado& guardado) {
     int saldo = guardado.monedas(), record = guardado.record();
     std::string titular = guardado.titular();
     int oleadaRecord = guardado.oleadaRecord(), modoRecord = guardado.modoRecord();
+    RecordGlobal global(guardado.idInstalacion());
     OpcionArma opciones[CantidadArmas];
     for (int i = 0; i < CantidadArmas; ++i)
         opciones[i].abierta = armas[i].precio == 0 || guardado.disponible(i);
@@ -50,6 +52,8 @@ void ejecutar(const Arte& arte, Guardado& guardado) {
     while (!WindowShouldClose()) {
         float dt = std::min(GetFrameTime(), .05f);
         tiempo += dt;
+        global.actualizar(dt, vista == Vista::Menu || vista == Vista::Carga || vista == Vista::Derrota,
+                          record, oleadaRecord, modoRecord);
         if (vista == Vista::Carga && tiempo >= FinCarga) vista = Vista::Menu;
         const bool pausaTecla = IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_P);
         const bool pausaClic = IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), BotonPausa);
@@ -102,10 +106,10 @@ void ejecutar(const Arte& arte, Guardado& guardado) {
         BeginDrawing();
         switch (vista) {
         case Vista::Carga:
-            dibujarMenu(saldo, record, titular, oleadaRecord, modoRecord);
+            dibujarMenu(saldo, record, titular, oleadaRecord, modoRecord, global.texto());
             dibujarCarga(arte, tiempo);
             break;
-        case Vista::Menu: accion = dibujarMenu(saldo, record, titular, oleadaRecord, modoRecord); break;
+        case Vista::Menu: accion = dibujarMenu(saldo, record, titular, oleadaRecord, modoRecord, global.texto()); break;
         case Vista::Armas: accion = dibujarArmas(arte, opciones, seleccion, modo, saldo, tiempo); break;
         case Vista::Juego: dibujarPartida(arte, partida); break;
         case Vista::Pausa:
@@ -152,6 +156,7 @@ void ejecutar(const Arte& arte, Guardado& guardado) {
             if (accion.guardar) {
                 nombre.erase(nombre.find_last_not_of(' ') + 1);
                 if (guardado.guardarRecord(partida.puntaje(), nombre, partida.ronda, int(partida.modo))) {
+                    global.solicitar();
                     record = guardado.record();
                     titular = guardado.titular();
                     oleadaRecord = guardado.oleadaRecord();
